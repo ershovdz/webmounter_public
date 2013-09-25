@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>./icons/docs_logo_ru.png</file>
+    </qresource>
+</RCC>

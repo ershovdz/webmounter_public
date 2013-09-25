@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=webmounter
+Icon=drive
+Type=Application
+Terminal=false
+Name=WebMounter
+Categories=Network

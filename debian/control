@@ -1,0 +1,17 @@
+Source: webmounter
+Priority: extra
+Maintainer: Yuri Ershov <eryv@yandex.ru>
+Build-Depends: debhelper (>= 7.2.3)
+Standards-Version: 3.7.3
+
+Package: webmounter
+Architecture: any
+Depends: ${shlibs:Depends}, 
+Description: Web Mount service application
+
+Package: webmounter-dbg
+Architecture: any
+Section: libdevel
+Depends: contacts (= ${binary:Version})
+Description: Debug symbols for Web Mount service.
+

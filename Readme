@@ -1,0 +1,47 @@
+  WebMounter
+
+  Copyright(c) Alexander Ershov http://github.com/ershovdz
+
+
+
+What is WebMounter
+=====================
+
+WebMounter can be used in case you want to map any http storage as 
+local drive on Windows (or local directory on Linux). Storages 
+supported by default: Google docs, Yandex.Fotki, Yandex.Disk, 
+Yandex.Narod, Facebook, Vkontakte.
+Additional plug-ins can be implemented for other storages.
+
+
+Licensing
+=========
+WebMounter is LGPL licensed program.
+
+For detals, please check license files.
+LGPL license.lgpl.txt
+
+You can obtain source files from http://github.com/ershovdz/WebDisk
+
+
+Environment
+===========
+
+WebMounter works on Windowx XP,2003,Vista,2008,7 and on Linux 
+(Ubuntu, Debian disributives).
+
+
+How it works
+============
+
+At startup WebMounter creates local drive with mirrors of remote http 
+storages. All operations with local files automatically translated to 
+remote storage. 
+Dokan library (http://dokan-dev.net) and FUSE are used for creation 
+of WebMounter file system in Windows OS and Linux, respectively.  
+
+
+Misc
+====
+
+You're welcome to create additional storages plug-ins.

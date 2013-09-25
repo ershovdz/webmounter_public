@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>./icons/yaf.png</file>
+    </qresource>
+</RCC>

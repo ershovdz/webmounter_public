@@ -1,0 +1,141 @@
+#!/usr/bin/make -f
+
+# some commonly used local vars
+comma:= ,
+empty:=
+space:= $(empty) $(empty)
+
+
+# project specific
+PROJECT_NAME:= webmounter
+BUILD_DIR:= builddir
+export BUILD_DIR
+# remember to have each part separately quoted!
+EXTRA_QMAKE_OPTIONS := $(empty)
+# custom install root
+export INSTALL_ROOT=$(CURDIR)/debian/tmp
+# force prefix for the .pc file (otherwise read from the install root)
+export PC_PREFIX=/usr
+
+
+# Uncomment this to turn on verbose mode.
+export DH_VERBOSE=1
+
+
+# custom C(XX)FLAGS
+CFLAGS += -Wall -g
+
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+    CFLAGS += -O0
+else
+    CFLAGS += -O2
+endif
+
+EXTRA_QMAKE_OPTIONS += "QMAKE_CXXFLAGS=$(CFLAGS)"
+
+# allow warning and debug prints and asserts only with debug flag enabled
+ifeq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+    EXTRA_QMAKE_OPTIONS += "DEFINES=QT_NO_DEBUG QT_NO_DEBUG_OUTPUT"
+endif
+
+#ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+#    INSTALL_PROGRAM += -s
+#endif
+
+
+# check for parallel parameter
+ifneq (,$(findstring parallel=,$(DEB_BUILD_OPTIONS)))
+    # DEB_BUILD_OPTIONS can't seem to make its mind with the list usage...
+    # ...so replace commas with spaces before doing anything else
+    PROPER_DEB_BUILD_OPTIONS := $(strip $(subst $(comma),$(space),$(DEB_BUILD_OPTIONS)))
+    # get the number of jobs
+    MAKE_PARALLEL_PARAMS := -j$(subst parallel=,$(empty),$(filter parallel=%,$(PROPER_DEB_BUILD_OPTIONS)))
+endif
+
+
+builddir:
+	mkdir -p $(BUILD_DIR)
+
+configure: configure-stamp
+configure-stamp: builddir
+	dh_testdir
+
+	# Add here commands to configure the package.
+	cd $(BUILD_DIR) && qmake-qt4 $(EXTRA_QMAKE_OPTIONS) ../$(PROJECT_NAME).pro
+
+	touch configure-stamp
+
+
+build: build-stamp
+
+build-stamp: configure-stamp
+	dh_testdir
+
+	# Add here commands to compile the package.
+	cd $(BUILD_DIR) && $(MAKE) $(MAKE_PARALLEL_PARAMS)
+
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+
+	# Add here commands to clean up after the build process.
+	[ ! -f $(BUILD_DIR)/Makefile ] || (cd $(BUILD_DIR) && $(MAKE) clean distclean)
+	rm -r -f $(BUILD_DIR)
+	rm -f -r debian/tmp
+
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+
+	# Add here commands to install the package into debian/tmp.
+	cd $(BUILD_DIR) && $(MAKE) $(MAKE_PARALLEL_PARAMS) install
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+#	dh_installexamples
+	dh_install --sourcedir=debian/tmp --list-missing
+#	dh_installmenu
+#	dh_installdebconf
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_python
+#	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+#	dh_installman
+	dh_link
+	dh_strip --dbg-package="webmounter-dbg"
+	dh_compress --exclude=doc/$(PROJECT_NAME)/  # don't compress our documentation
+	dh_fixperms
+#	dh_perl
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
+
+
+# End of File
+

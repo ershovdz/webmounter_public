@@ -1,0 +1,11 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/webmounter
+
+Name: libwmui
+URL: 
+Description: Library with UI base classes for Web Mount service.
+Version: 1.0.0
+Libs: -L${libdir} -lwmui 
+Cflags: -I${includedir}

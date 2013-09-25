@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/diskUp.jpeg</file>
+        <file>resources/diskUp.png</file>
+        <file>resources/config.png</file>
+        <file>resources/drive.ico</file>
+        <file>resources/drive.png</file>
+        <file>resources/progressbar.gif</file>
+    </qresource>
+</RCC>

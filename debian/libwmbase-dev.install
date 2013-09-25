@@ -1,0 +1,10 @@
+usr/include/webmounter/common_stuff.h
+usr/include/webmounter/data.h
+usr/include/webmounter/vfs_cache.h
+usr/include/webmounter/vfs_element.h
+usr/include/webmounter/webmounter.h
+usr/include/webmounter/rvfs_driver.h
+usr/include/webmounter/reg_exp.h
+usr/include/webmounter/plugin_interface.h
+usr/include/webmounter/notification_device.h
+usr/lib/webmounter/base/libwmbase.so
