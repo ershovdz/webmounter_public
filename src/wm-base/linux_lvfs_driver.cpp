@@ -63,7 +63,7 @@ namespace LocalDriver
 	{
 		if( !isRunning() )
 		{
-			_rootDirectory = generalSettings.appStoragePath;
+			_rootDirectory = generalSettings.m_appStoragePath;
 			_mountPoint = QDir::homePath() + QDir::separator() + QString::fromUtf8("WebMounter") + QDir::separator();
 			QDir dir;
 			dir.mkpath(_mountPoint);

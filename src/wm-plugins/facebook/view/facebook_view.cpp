@@ -31,19 +31,19 @@ namespace Ui
 	FacebookView::FacebookView(const Data::PluginSettings* settings, const QString& title)
 		: PluginView(settings, title)
 	{
-		_urlEdit->setText("facebook.com");
-		_urlEdit->setEnabled(false);
+                m_urlEdit->setText("facebook.com");
+                m_urlEdit->setEnabled(false);
 
-		_oauthCheckBox->setChecked(true);
-		_oauthCheckBox->setVisible(false);
+                m_oauthCheckBox->setChecked(true);
+                m_oauthCheckBox->setVisible(false);
 
-		_nameLabel->setVisible(false);
-		_nameEdit->setVisible(false);
-		_passwordLabel->setVisible(false);
-		_passwordEdit->setVisible(false);
+                m_nameLabel->setVisible(false);
+                m_nameEdit->setVisible(false);
+                m_passwordLabel->setVisible(false);
+                m_passwordEdit->setVisible(false);
 
-		_oauthObj = new FacebookOAuth();
-		connect(_oauthObj, SIGNAL(authFinished(RESULT, const QString&, const QString&)), this, SLOT(oAuthFinished(RESULT, const QString&, const QString&)));
+                m_oauthObj = new FacebookOAuth();
+                connect(m_oauthObj, SIGNAL(authFinished(RESULT, const QString&, const QString&)), this, SLOT(oAuthFinished(RESULT, const QString&, const QString&)));
 	}
 
 	bool FacebookView::isKeyValueValid(const Data::PluginSettings&)
@@ -54,18 +54,18 @@ namespace Ui
 	void FacebookView::updateView(int progress, int state)
 	{
 		PluginView::updateView(progress, state);
-		_urlEdit->setEnabled(false);
+                m_urlEdit->setEnabled(false);
 
-		_nameLabel->setVisible(false);
-		_nameEdit->setVisible(false);
-		_passwordLabel->setVisible(false);
-		_passwordEdit->setVisible(false);
+                m_nameLabel->setVisible(false);
+                m_nameEdit->setVisible(false);
+                m_passwordLabel->setVisible(false);
+                m_passwordEdit->setVisible(false);
 
 		PluginSettings pluginSettings; 
 		Common::WebMounter::getSettingStorage()->getData(pluginSettings, "Facebook");
-		if(pluginSettings.isOAuthUsing && (state == RemoteDriver::eAuthInProgress) && progress == 0) // Started to authenticate
+                if(pluginSettings.m_isOAuthUsing && (state == RemoteDriver::eAuthInProgress) && progress == 0) // Started to authenticate
 		{
-			_oauthObj->authenticate();
+                        m_oauthObj->authenticate();
 		}
 	}
 
@@ -79,10 +79,10 @@ namespace Ui
 		{
 			PluginSettings pluginSettings; 
 			Common::WebMounter::getSettingStorage()->getData(pluginSettings, "Facebook");
-			pluginSettings.userName = login;
-			pluginSettings.oAuthToken = token;
+                        pluginSettings.m_userName = login;
+                        pluginSettings.m_oAuthToken = token;
 
-			static_cast<FacebookRVFSDriver*>(_driver)->connectHandlerStage2(error, pluginSettings);
+                        static_cast<FacebookRVFSDriver*>(m_driver)->connectHandlerStage2(error, pluginSettings);
 		}
 	}
 }

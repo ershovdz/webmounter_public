@@ -33,33 +33,33 @@ namespace Ui
 	}
 
 
-	FacebookOAuth::FacebookOAuth() : _view(NULL)
+        FacebookOAuth::FacebookOAuth() : m_view(NULL)
 	{
-		_oAuthTimer = new QTimer();
-		connect(_oAuthTimer, SIGNAL(timeout()), this, SLOT(slotOAuthTimeout()));
+                m_oAuthTimer = new QTimer();
+                connect(m_oAuthTimer, SIGNAL(timeout()), this, SLOT(slotOAuthTimeout()));
 	}
 
 	FacebookOAuth::~FacebookOAuth()
 	{
-		delete _oAuthTimer;
+                delete m_oAuthTimer;
 	}
 
 	void FacebookOAuth::initializeWebView()
 	{
-		_view = new WebView();
-		_view->setWindowTitle(tr("Facebook | Authentication"));
-		_view->page()->setForwardUnsupportedContent(true);
+                m_view = new WebView();
+                m_view->setWindowTitle(tr("Facebook | Authentication"));
+                m_view->page()->setForwardUnsupportedContent(true);
 		QNetworkAccessManager * manager = new QNetworkAccessManager(this);
 
 		connect(manager, SIGNAL(finished(QNetworkReply*)),this,SLOT(finished(QNetworkReply*)));
 		connect(manager, SIGNAL(sslErrors(QNetworkReply *, const QList<QSslError> &)), this, SLOT(ignoreSSL( QNetworkReply *, const QList<QSslError> & )));
-		connect(_view->page(), SIGNAL(unsupportedContent(QNetworkReply *)), this, SLOT(handleUnsupportedContent(QNetworkReply *)));
-		connect(_view, SIGNAL(finished(RESULT)), this, SLOT(finished(RESULT)));
+                connect(m_view->page(), SIGNAL(unsupportedContent(QNetworkReply *)), this, SLOT(handleUnsupportedContent(QNetworkReply *)));
+                connect(m_view, SIGNAL(finished(RESULT)), this, SLOT(finished(RESULT)));
 
-		_view->page()->setNetworkAccessManager(manager);
-		_view->page()->triggerAction(QWebPage::Forward);
+                m_view->page()->setNetworkAccessManager(manager);
+                m_view->page()->triggerAction(QWebPage::Forward);
 
-		_view->resize(600, 380);
+                m_view->resize(600, 380);
 	}
 
 	void FacebookOAuth::finished(QNetworkReply *reply) 
@@ -69,24 +69,24 @@ namespace Ui
 
 		if(attr == 302) // redirect
 		{
-			_oAuthTimer->stop();
+                        m_oAuthTimer->stop();
 
 			QString url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toString();
 			if(url.contains("access_token="))
 			{
-				_token = Data::RegExp::getByPattern("access_token=(.*)&expires_in=", url);
+                                m_token = Data::RegExp::getByPattern("access_token=(.*)&expires_in=", url);
 
-				delete _view;
-				_view = NULL;
+                                delete m_view;
+                                m_view = NULL;
 
-				emit authFinished(eNO_ERROR, "", _token);
+                                emit authFinished(eNO_ERROR, "", m_token);
 			}
 		}
 		else if(attr == 200 && !reply->url().toString().contains("login.php") 
 			&& reply->url().toString().contains("error_description=The+user+denied+your+request."))
 		{
-			delete _view;
-			_view = NULL;
+                        delete m_view;
+                        m_view = NULL;
 
 			emit authFinished(eERROR_CANCEL, "", "");
 		}
@@ -101,8 +101,8 @@ namespace Ui
 		QString url = reply->url().toString();
 		if(url.contains("webmounter://token#access_token="))
 		{
-			_token = Data::RegExp::getByPattern("webmounter://token#access_token=(.*)&state", url);
-			QNetworkCookieJar *cookie = _view->page()->networkAccessManager()->cookieJar();
+                        m_token = Data::RegExp::getByPattern("webmounter://token#access_token=(.*)&state", url);
+                        QNetworkCookieJar *cookie = m_view->page()->networkAccessManager()->cookieJar();
 			QUrl yafUrl ("https://oauth.yandex.ru");
 			QString login;
 			for (int i=0; i < cookie->cookiesForUrl(yafUrl).count(); i++)
@@ -114,10 +114,10 @@ namespace Ui
 				}
 			}
 
-			delete _view;
-			_view = NULL;
+                        delete m_view;
+                        m_view = NULL;
 
-			emit authFinished(eNO_ERROR, login, _token);
+                        emit authFinished(eNO_ERROR, login, m_token);
 		}
 	}
 
@@ -128,45 +128,45 @@ namespace Ui
 
 	void FacebookOAuth::authenticate()
 	{
-		if(!_view)
+                if(!m_view)
 		{
 			initializeWebView();
 		}
 
 		GeneralSettings generalSettings; 
 		WebMounter::getSettingStorage()->getData(generalSettings);
-		if(generalSettings.proxyAddress.length())
+                if(generalSettings.m_proxyAddress.length())
 		{
 			QNetworkProxy proxy;
 			proxy.setType(QNetworkProxy::HttpProxy);
-			proxy.setHostName(generalSettings.proxyAddress.left(generalSettings.proxyAddress.lastIndexOf(":")));
-			QString portStr = generalSettings.proxyAddress.right(generalSettings.proxyAddress.length() - generalSettings.proxyAddress.lastIndexOf(":")-1);
+                        proxy.setHostName(generalSettings.m_proxyAddress.left(generalSettings.m_proxyAddress.lastIndexOf(":")));
+                        QString portStr = generalSettings.m_proxyAddress.right(generalSettings.m_proxyAddress.length() - generalSettings.m_proxyAddress.lastIndexOf(":")-1);
 			proxy.setPort(portStr.toInt());
-			proxy.setUser(generalSettings.proxyLogin);
-			proxy.setPassword(generalSettings.proxyPassword);
+                        proxy.setUser(generalSettings.m_proxyLogin);
+                        proxy.setPassword(generalSettings.m_proxyPassword);
 
-			_view->page()->networkAccessManager()->setProxy(proxy);
+                        m_view->page()->networkAccessManager()->setProxy(proxy);
 		}
 
-		_view->load(QUrl("https://graph.facebook.com/oauth/authorize?client_id=279257372195269&redirect_uri=http://www.facebook.com/connect/login_success.html&type=user_agent&display=popup&scope=publish_stream,user_photos,read_stream,email"));
-		_view->show();
-		if (!_oAuthTimer->isActive())
-			_oAuthTimer->start(60*1000);
+                m_view->load(QUrl("https://graph.facebook.com/oauth/authorize?client_id=279257372195269&redirect_uri=http://www.facebook.com/connect/login_success.html&type=user_agent&display=popup&scope=publish_stream,user_photos,read_stream,email"));
+                m_view->show();
+                if (!m_oAuthTimer->isActive())
+                        m_oAuthTimer->start(60*1000);
 	}
 
 	void FacebookOAuth::finished(RESULT error)
 	{
-		delete _view;
-		_view = NULL;
+                delete m_view;
+                m_view = NULL;
 
 		emit authFinished(error, "", "");
 	}
 
 	void FacebookOAuth::slotOAuthTimeout()
 	{
-		_oAuthTimer->stop();
-		delete _view;
-		_view = NULL;
+                m_oAuthTimer->stop();
+                delete m_view;
+                m_view = NULL;
 
 		emit authFinished(eERROR_GENERAL, "", "");
 	}
