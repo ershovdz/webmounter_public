@@ -68,7 +68,7 @@ QIcon* YaDiskPlugin::getIcon()
 {
     if(!m_icon)
 	{
-        m_icon = new QIcon(":/icons/yandex_disk.png");
+        m_icon = new QIcon(":/icons/ya_disk.png");
 	}
 
     return m_icon;

@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>./icons/yandex_disk.png</file>
+        <file>./icons/ya_disk.png</file>
     </qresource>
 </RCC>
