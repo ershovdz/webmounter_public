@@ -403,6 +403,7 @@ namespace LocalDriver
 			int status;
 			unsigned long command;
 
+			memset(&_driverOperations, 0, sizeof(fuse_operations));
 			_driverOperations.getattr = LVFSDriver::fuseGetAttr;
 			_driverOperations.readlink = LVFSDriver::fuseReadLink;
 			_driverOperations.getdir = NULL;
