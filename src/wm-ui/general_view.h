@@ -52,6 +52,7 @@ namespace Ui
 #endif
 
 		private slots:
+			void acceptClicked();
 			void mountClicked();
 			void unmountClicked();
 
@@ -66,16 +67,23 @@ signals:
 	private:
 		QWidget* m_parent;
 
+		QLabel* m_proxyLabel;
+		QLineEdit* m_proxyEdit;
+		QLabel* m_proxyLoginLabel;
+		QLineEdit* m_proxyLoginEdit;
+		QLabel* m_passwordLabel;
+		QLineEdit* m_passwordEdit;
+
 		QGroupBox* m_diskStatusGroup;
 		QGridLayout* m_diskStatusLayout;
 
 		QLabel* m_statusLabel;
 		QLabel* m_statusValue;
 
-		//#ifdef Q_OS_WIN
-		//    QLabel *_diskLetterLabel;
-		//    QComboBox *_diskLetterComboBox;
-		//#endif
+		QPushButton* m_acceptButton;
+
+		QGroupBox* m_proxyGroup;
+		QGridLayout* m_proxyLayout;
 
 		QGroupBox* m_buttonGroup;
 		QGridLayout* m_buttonLayout;

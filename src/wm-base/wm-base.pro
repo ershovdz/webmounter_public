@@ -1,11 +1,18 @@
 QT += sql network
 TARGET = wmbase
 TEMPLATE = lib
-target.path = /usr/lib/webmounter/base
+
+isEmpty(INSTALL_PREFIX):INSTALL_PREFIX = /usr/lib
+target.path = $${INSTALL_PREFIX}/webmounter
+
 DESTDIR = ../build/lib
+
 DEFINES += WEBMOUNTER_LIBRARY
+DEFINES += INSTALL_PREFIX=\\\"$${INSTALL_PREFIX}\\\"
+
 QMAKE_CXXFLAGS += -D_FILE_OFFSET_BITS=64 \
         -DFUSE_USE_VERSION=26
+
 HEADERS += common_stuff.h \
 	data.h \
 	file_proxy.h \
@@ -72,8 +79,8 @@ unix {
 	qmfiles.path = /usr/share/webmounter
 
 	lib.files += libwmbase.pc
-	lib.path = /usr/lib/pkgconfig
-	
+	lib.path = $${INSTALL_PREFIX}/pkgconfig
+
 	INSTALLS += qmfiles \
 		    lib
 }

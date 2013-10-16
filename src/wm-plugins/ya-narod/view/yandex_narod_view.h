@@ -24,8 +24,6 @@
 
 namespace Ui
 {
-	class YafOAuth;
-
 	class YandexNarodView : public PluginView
 	{
 		Q_OBJECT

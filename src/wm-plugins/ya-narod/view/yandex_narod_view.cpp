@@ -17,7 +17,6 @@
  * Contact e-mail: Alexander Ershov <ershav@yandex.ru>
  */
 
-#include "yaf_oauth.h"
 #include "yandex_narod_view.h"
 #include "../driver/yandex_narod_driver.h"
 #include "webmounter.h"

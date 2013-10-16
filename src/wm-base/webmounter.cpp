@@ -151,10 +151,15 @@ LocalDriver::ILVFSDriver* WebMounter::getLocalDriver()
 
 bool WebMounter::loadPlugins()
 {
+#ifdef Q_OS_WIN
 	QDir pluginsDir(qApp->applicationDirPath());
 	pluginsDir.cd("..");
 	pluginsDir.cd("lib");
-
+#endif
+#ifdef Q_OS_LINUX
+	QDir pluginsDir(INSTALL_PREFIX);
+#endif
+	
 	if(pluginsDir.exists(pluginsDir.absolutePath() + QDir::separator() + "webmounter"))
 	{
 		pluginsDir.cd("webmounter/plugins");

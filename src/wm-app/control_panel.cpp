@@ -106,6 +106,12 @@ namespace Ui
 
         m_pagesWidget = new QStackedWidget;
 
+		m_generalView = new GeneralView(generalSettings, this);
+		connect(m_generalView, SIGNAL(mount()), this, SIGNAL(mount()));
+		connect(m_generalView, SIGNAL(unmount()), this, SIGNAL(unmount()));
+
+		m_pagesWidget->addWidget(m_generalView);
+
 		Common::PluginList& plugins = Common::WebMounter::plugins();
 		Common::PluginList::iterator iter;
 		for(iter=plugins.begin(); iter!=plugins.end(); iter++)
@@ -117,12 +123,6 @@ namespace Ui
 			view = (PluginView*)iter->second->getView();
             m_pagesWidget->addWidget(view);
 		}
-
-        m_generalView = new GeneralView(generalSettings, this);
-        connect(m_generalView, SIGNAL(mount()), this, SIGNAL(mount()));
-        connect(m_generalView, SIGNAL(unmount()), this, SIGNAL(unmount()));
-
-        m_pagesWidget->addWidget(m_generalView);
 
 		createIcons();
 
@@ -199,6 +199,12 @@ namespace Ui
 
 	void ControlPanel::createIcons()
 	{
+		m_configButton = new QListWidgetItem(m_contentsWidget);
+		m_configButton->setIcon(QIcon(":/resources/config.png"));
+		m_configButton->setText(tr("Configuration"));
+		m_configButton->setTextAlignment(Qt::AlignHCenter);
+		m_configButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
 		Common::PluginList& plugins = Common::WebMounter::plugins();
 		Common::PluginList::iterator iter;
 		for(iter=plugins.begin(); iter!=plugins.end(); iter++)
@@ -209,12 +215,6 @@ namespace Ui
 			button->setTextAlignment(Qt::AlignHCenter);
 			button->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		}
-
-		/*_configButton = new QListWidgetItem(_contentsWidget);
-		_configButton->setIcon(QIcon(":/resources/config.png"));
-		_configButton->setText(tr("Configuration"));
-		_configButton->setTextAlignment(Qt::AlignHCenter);
-		_configButton->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);*/
 
         connect(m_contentsWidget,
 			SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),

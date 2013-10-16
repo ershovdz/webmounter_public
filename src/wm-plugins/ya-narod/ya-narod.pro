@@ -45,13 +45,12 @@ else {
 	INSTALLS += qmfiles
 }
 
-QMAKE_RPATHDIR += ../../build/lib
 QMAKE_LIBDIR += ../../build/lib
 
-TARGET          = $$qtLibraryTarget(wm-ya-narod-plugin)
+TARGET          = wm-ya-narod-plugin
 DESTDIR         = ../../build/lib/plugins
 
-target.path = /usr/lib/webmounter/plugins
+target.path = $${INSTALL_PREFIX}/webmounter/plugins
 
 RESOURCES += ya-narod.qrc
 

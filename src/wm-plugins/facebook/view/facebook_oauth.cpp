@@ -19,6 +19,7 @@
 
 #include <QtGui>
 #include <QtWebKit>
+#include <QNetworkProxy>
 #include "webmounter.h"
 #include "reg_exp.h"
 #include "facebook_oauth.h"

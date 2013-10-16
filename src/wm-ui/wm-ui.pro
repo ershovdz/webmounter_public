@@ -1,6 +1,8 @@
 TARGET = wmui
 TEMPLATE = lib
-target.path = /usr/lib/webmounter/ui
+
+target.path = $${INSTALL_PREFIX}/webmounter
+
 DESTDIR = ../build/lib
 
 DEFINES += WEBMOUNTER_UI_LIBRARY
@@ -28,7 +30,6 @@ win32 {
 sources.files += $$HEADERS_EXPORT
 sources.path = /usr/include/webmounter
 
-QMAKE_RPATHDIR += ../build/lib /usr/lib/webmounter/base
 QMAKE_LIBDIR += ../build/lib
 
 LIBS += -lwmbase
@@ -52,7 +53,7 @@ unix {
 	qmfiles.path = /usr/share/webmounter
 
 	lib.files += libwmui.pc
-	lib.path = /usr/lib/pkgconfig
+	lib.path = $${INSTALL_PREFIX}/pkgconfig
 
 	INSTALLS += sources \
 				qmfiles \
